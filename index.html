@@ -392,17 +392,26 @@
       });
     }
     const capitalGroups = [
-      ["하", [["대한민국", "서울"], ["일본", "도쿄"], ["중국", "베이징"], ["태국", "방콕"], ["영국", "런던"], ["프랑스", "파리"], ["이탈리아", "로마"], ["독일", "베를린"]]],
-      ["중", [["캐나다", "오타와"], ["호주", "캔버라"], ["뉴질랜드", "웰링턴"], ["브라질", "브라질리아"], ["튀르키예", "앙카라"], ["모로코", "라바트"], ["핀란드", "헬싱키"], ["폴란드", "바르샤바"]]],
-      ["중상", [["카자흐스탄", "아스타나"], ["우즈베키스탄", "타슈켄트"], ["키르기스스탄", "비슈케크"], ["타지키스탄", "두샨베"], ["에스토니아", "탈린"], ["라트비아", "리가"], ["리투아니아", "빌뉴스"], ["슬로베니아", "류블랴나"]]]
+      ['중', [
+        [['캐나다', '오타와'], ['호주', '캔버라'], ['뉴질랜드', '웰링턴'], ['브라질', '브라질리아'],
+         ['튀르키예', '앙카라'], ['모로코', '라바트'], ['핀란드', '헬싱키'], ['폴란드', '바르샤바']]
+      ]],
+      ['중상', [
+        [['카자흐스탄', '아스타나'], ['우즈베키스탄', '타슈켄트'], ['키르기스스탄', '비슈케크'], ['타지키스탄', '두샨베']],
+        [['에스토니아', '탈린'], ['라트비아', '리가'], ['리투아니아', '빌뉴스'], ['슬로베니아', '류블랴나']]
+      ]],
+      ['상', [
+        [['사모아', '아피아'], ['통가', '누쿠알로파'], ['투발루', '푸나푸티'], ['바누아투', '포트빌라']],
+        [['세네갈', '다카르'], ['말리', '바마코'], ['기니', '코나크리'], ['부르키나파소', '와가두구']]
+      ]]
     ];
     function generateCapitalQuestions(count) {
-      const tiers = capitalGroups.map(([difficulty, countries]) =>
-        shuffle(countries).map(([country, capital]) => ({
+      const tiers = capitalGroups.map(([difficulty, regions]) =>
+        shuffle(regions.flatMap(countries => countries.map(([country, capital]) => ({
           ...makeMCQuestion('🏙️', `${country}의 수도는 어디일까요?`, capital,
             shuffle(countries.map(([, city]) => city).filter(city => city !== capital)).slice(0, 3), 'capitals'),
           difficulty
-        }))
+        }))))
       );
       if (count < tiers.length) return shuffle(tiers).slice(0, count).map(tier => tier[0]);
       return Array.from({ length: count }, (_, i) => tiers[Math.floor(i * tiers.length / count)].shift());
